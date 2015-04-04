@@ -6,10 +6,10 @@ local Block = {
 }
 
 local function move(event)
-  if event.phase == "began" then
+  if event.phase == 'began' then
     event.target.markX = event.taget.x
     event.target.markY = event.target.y
-  elseif even.phase == "moved" then
+  elseif even.phase == 'moved' then
     local x = (event.x - event.xStart) + event.target.markX
     local y = (event.y - event.yStart) + event.target.markY
     event.target.x = x;
@@ -26,7 +26,7 @@ end
 
 function Block:init(o)
   self:draw()
-  self.shape:addEventListener("touch", move)
+  self.shape:addEventListener('touch', move)
 end
 
 function Block:draw()
