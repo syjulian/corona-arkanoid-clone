@@ -1,10 +1,15 @@
 local composer = require('composer')
 local gameScene = composer.newScene()
 local Arena = require('Arena')
+local Panel = require('Panel')
 local Block = require('Block')
+local Ball = require('Ball')
 
 arena = Arena:new()
 arena:init()
+
+function gameScene:create(event)
+end
 
 function gameScene:show(event)
   if(event.phase == 'will') then

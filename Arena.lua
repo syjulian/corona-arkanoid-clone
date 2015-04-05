@@ -5,7 +5,7 @@ local Arena = {
   wallGroup = display.newGroup()
 }
 
-function Arena:new()
+function Arena:new(o)
   o = o or {}
   setmetatable(o, self)
   self.__index = self
@@ -14,14 +14,13 @@ end
 
 function Arena:drawWalls()
   local top =
-    display.newRect(0,100,self.width, self.thickness)
+    display.newRect(0, 0,self.width, self.thickness)
   local left =
     display.newRect(0,0,self.thickness, self.height)
   local right =
     display.newRect(self.width-self.thickness,0,self.thickness,self.height)
   local bottom =
-    display.newRect(0,self.height-self.thickness, self.width, self.thickness)
-
+    display.newRect(0,self.height, self.width, self.thickness)
   top.anchorX = 0
   top.anchorY = 0
   left.anchorX = 0
@@ -37,8 +36,25 @@ function Arena:drawWalls()
   self.wallGroup:insert(bottom)
 end
 
+function Arena:drawPaddle()
+  local paddle = 
+    display.newRect(
+      self.width / 2, 
+      self.height * 0.8, 
+      self.width * 0.25, 
+      self.thickness / 2
+    )
+
+  self.wallGroup:insert(paddle)
+end
+
+function Arena:draw()
+  self:drawWalls()
+  self:drawPaddle()
+end
+
 function Arena:init()
-  Arena:drawWalls()
+  self:draw()
 end
 
 return Arena
