@@ -1,11 +1,7 @@
-local Ball = require('Ball')
-local Block = require('Block')
+local composer = require('composer')
+local block = require('Block')
 
-block = Block:new({
-  xPos = 100,
-  yPos = 50
+composer.gotoScene('gameScene', {
+  effect = 'fade',
+  time = 1000
 })
-block:draw()
-
-function createWalls()
-end

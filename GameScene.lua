@@ -1,8 +1,10 @@
-local composer = require('composer');
+local composer = require('composer')
 local gameScene = composer.newScene()
+local Arena = require('Arena')
+local Block = require('Block')
 
-function gameScene:create(event)
-end
+arena = Arena:new()
+arena:init()
 
 function gameScene:show(event)
   if(event.phase == 'will') then
@@ -20,8 +22,8 @@ function gameScene:hide(event)
   end
 end
 
-gameScene:addEventListener('create', scene)
-gameScene:addEventListener('show', scene)
-gameScene:addEventListener('hide', scene)
+gameScene:addEventListener('create', gameScene)
+gameScene:addEventListener('show', gameScene)
+gameScene:addEventListener('hide', gameScene)
 
 return gameScene

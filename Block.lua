@@ -1,21 +1,9 @@
 local Block = {
-  length = 40,
-  width = 20,
+  length = 100,
+  width = 50,
   xPos = 0,
   yPos = 0
 }
-
-local function move(event)
-  if event.phase == 'began' then
-    event.target.markX = event.taget.x
-    event.target.markY = event.target.y
-  elseif even.phase == 'moved' then
-    local x = (event.x - event.xStart) + event.target.markX
-    local y = (event.y - event.yStart) + event.target.markY
-    event.target.x = x;
-		event.target.y = y;
-  end
-end
 
 function Block:new(o)
   o = o or {}
@@ -24,7 +12,19 @@ function Block:new(o)
   return o
 end
 
-function Block:init(o)
+local function move(event)
+  if event.phase == 'began' then
+    event.target.markX = event.target.x
+    event.target.markY = event.target.y
+  elseif event.phase == 'moved' then
+    local x = (event.x - event.xStart) + event.target.markX
+    local y = (event.y - event.yStart) + event.target.markY
+    event.target.x = x;
+		event.target.y = y;
+  end
+end
+
+function Block:init()
   self:draw()
   self.shape:addEventListener('touch', move)
 end
