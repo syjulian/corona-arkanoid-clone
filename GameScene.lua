@@ -8,6 +8,9 @@ local Ball = require('Ball')
 arena = Arena:new()
 arena:init()
 
+panel = Panel:new()
+panel:init()
+
 function gameScene:create(event)
 end
 
