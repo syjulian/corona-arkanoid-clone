@@ -1,14 +1,15 @@
+Color = require('Color')
+
 local Panel = {
   height = 200,
   width = display.contentWidth,
   xPos = display.contentWidth / 2,
   yPos = display.contentHeight + display.contentWidth / 8,
-  buttons = {
-    [0] = {btnType = "red"},
-    [1] = {btnType = "blue"},
-    [2] = {bred = "yellow"},
-    [3] = {btnType = "gray"},
-    [4] = {btnType = "start"}
+  btnInfo = {
+    [0] = {btnType = 'red', color = Color.red},
+    [1] = {btnType = 'blue', color = Color.blue},
+    [2] = {bred = 'yellow', color = Color.yellow},
+    [3] = {btnType = 'gray', color = Color.lightGray},
   },
   panelGroup = display.newGroup()
 }
@@ -21,13 +22,14 @@ function Panel:new(o)
 end
 
 function Panel:drawButtons()
-  for i = 0, 4 do
+  for i = 0, 3 do
     local button = display.newRect(
     i * self.width / 5,
     self.width / 5,
     self.width / 5 * 0.8,
     self.width / 5 * 0.8
     )
+    button:setFillColor(unpack(self.btnInfo[i].color))
     self.panelGroup:insert(button)
   end
 end

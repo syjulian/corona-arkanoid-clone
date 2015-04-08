@@ -1,17 +1,27 @@
 local composer = require('composer')
-local gameScene = composer.newScene()
 local Arena = require('Arena')
 local Panel = require('Panel')
 local Block = require('Block')
 local Ball = require('Ball')
 
-arena = Arena:new()
-arena:init()
+local gameScene = composer.newScene()
 
-panel = Panel:new()
-panel:init()
+gameScene.arena = Arena:new()
+gameScene.panel = Panel:new()
+
+function gameScene:onTouch(event)
+  self.arena:drawBlock(event.x,event.y)
+end
 
 function gameScene:create(event)
+  self.arena:init()
+  self.panel:init()
+  Runtime:addEventListener('tap', 
+    function(event) 
+      self:onTouch(event) 
+    end
+  )
+  
 end
 
 function gameScene:show(event)

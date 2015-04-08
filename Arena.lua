@@ -1,8 +1,12 @@
+Color = require('Color')
+Block = require('Block') 
+
 local Arena = {
   height = display.contentHeight,
   width = display.contentWidth,
   thickness = 20,
-  wallGroup = display.newGroup()
+  displayGroup = display.newGroup(),
+  blocks = {}
 }
 
 function Arena:new(o)
@@ -10,6 +14,21 @@ function Arena:new(o)
   setmetatable(o, self)
   self.__index = self
   return o
+end
+
+function Arena:drawBlock(x, y)
+  local block = Block:new({xPos = x, yPos = y})
+  block:init()  
+end
+
+function Arena:drawBg()
+  local bg =
+    display.newRect(0,0,self.width, self.height)
+  bg.anchorX = 0
+  bg.anchorY = 0
+
+  bg:setFillColor(unpack(Color.teal))
+  self.displayGroup:insert(bg)
 end
 
 function Arena:drawWalls()
@@ -30,10 +49,18 @@ function Arena:drawWalls()
   bottom.anchorX = 0
   bottom.anchorY = 0
 
-  self.wallGroup:insert(top)
-  self.wallGroup:insert(left)
-  self.wallGroup:insert(right)
-  self.wallGroup:insert(bottom)
+  top:setFillColor(unpack(Color.gray))
+  left:setFillColor(unpack(Color.gray))
+  right:setFillColor(unpack(Color.gray))
+  bottom:setFillColor(unpack(Color.gray))
+  self.displayGroup:insert(top)
+  self.displayGroup:insert(left)
+  self.displayGroup:insert(right)
+  self.displayGroup:insert(bottom)
+end
+
+function Arena:addBlock(x, y)
+  self:drawBlock(x, y)
 end
 
 function Arena:drawPaddle()
@@ -45,10 +72,12 @@ function Arena:drawPaddle()
       self.thickness / 2
     )
 
-  self.wallGroup:insert(paddle)
+  paddle:setFillColor(unpack(Color.gray))
+  self.displayGroup:insert(paddle)
 end
 
 function Arena:draw()
+  self:drawBg()
   self:drawWalls()
   self:drawPaddle()
 end
