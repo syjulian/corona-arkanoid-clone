@@ -21,6 +21,18 @@ function Panel:new(o)
   return o
 end
 
+local function onToggleButton(event)
+  local button = event.target
+
+  if(button.isToggled) then
+    button:setStrokeColor(unpack(Color.gray))
+    button.isToggled = false
+  else
+    button:setStrokeColor(unpack(Color.teal))
+    button.isToggled = true
+  end
+end
+
 function Panel:drawButtons()
   for i = 0, 3 do
     local button = display.newRect(
@@ -29,7 +41,12 @@ function Panel:drawButtons()
     self.width / 5 * 0.8,
     self.width / 5 * 0.8
     )
+
+    button:setStrokeColor(unpack(Color.gray))
+    button.strokeWidth = 5
     button:setFillColor(unpack(self.btnInfo[i].color))
+    button.isToggled = false
+    button:addEventListener('tap', onToggleButton)
     self.panelGroup:insert(button)
   end
 end

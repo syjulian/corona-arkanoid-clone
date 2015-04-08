@@ -9,16 +9,16 @@ local gameScene = composer.newScene()
 gameScene.arena = Arena:new()
 gameScene.panel = Panel:new()
 
-function gameScene:onTouch(event)
+function gameScene:onBgTouch(event)
   self.arena:drawBlock(event.x,event.y)
 end
 
 function gameScene:create(event)
   self.arena:init()
   self.panel:init()
-  Runtime:addEventListener('tap', 
+  self.arena.displayGroup:addEventListener('tap', 
     function(event) 
-      self:onTouch(event) 
+      self:onBgTouch(event) 
     end
   )
   
