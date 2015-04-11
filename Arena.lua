@@ -16,11 +16,6 @@ function Arena:new(o)
   return o
 end
 
-function Arena:drawBlock(x, y)
-  local block = Block:new({xPos = x, yPos = y})
-  block:init()  
-end
-
 function Arena:drawBg()
   local bg =
     display.newRect(0,0,self.width, self.height)
@@ -68,8 +63,8 @@ function Arena:drawPaddle()
     display.newRect(
       self.width / 2, 
       self.height * 0.8, 
-      self.width * 0.25, 
-      self.thickness / 2
+      self.width / 4, 
+      self.thickness
     )
 
   paddle:setFillColor(unpack(Color.gray))

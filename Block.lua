@@ -1,8 +1,11 @@
+local Color = require('Color')
 local Block = {
   length = 100,
   width = 50,
   xPos = 0,
-  yPos = 0
+  yPos = 0,
+  color = 'white',
+  rgb = Color.white
 }
 
 function Block:new(o)
@@ -31,6 +34,7 @@ end
 
 function Block:draw()
   self.shape = display.newRect(self.xPos, self.yPos, self.length, self.width)
+  self.shape:setFillColor(unpack(self.rgb))
 end
 
 return Block

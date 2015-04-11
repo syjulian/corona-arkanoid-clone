@@ -1,17 +1,23 @@
 Color = require('Color')
+BlockRed = require('BlockRed')
+BlockBlue = require('BlockBlue')
+BlockYellow = require('BlockYellow')
+BlockGray = require('BlockGray')
 
 local Panel = {
   height = 200,
   width = display.contentWidth,
   xPos = display.contentWidth / 2,
   yPos = display.contentHeight + display.contentWidth / 8,
-  btnInfo = {
-    [0] = {btnType = 'red', color = Color.red},
-    [1] = {btnType = 'blue', color = Color.blue},
-    [2] = {bred = 'yellow', color = Color.yellow},
-    [3] = {btnType = 'gray', color = Color.lightGray},
-  },
+  toggled = nil,
   panelGroup = display.newGroup()
+}
+
+local buttons = {
+    [0] = {color = 'red', rgb = Color.red, BlockClass = BlockRed},
+    [1] = {color = 'blue', rgb = Color.blue, BlockClass = BlockBlue},
+    [2] = {color = 'yellow', rgb = Color.yellow, BlockClass = BlockYellow},
+    [3] = {color = 'gray', rgb = Color.lightGray, BlockClass = BlockGray},
 }
 
 function Panel:new(o)
@@ -21,32 +27,50 @@ function Panel:new(o)
   return o
 end
 
-local function onToggleButton(event)
-  local button = event.target
-
-  if(button.isToggled) then
-    button:setStrokeColor(unpack(Color.gray))
-    button.isToggled = false
-  else
-    button:setStrokeColor(unpack(Color.teal))
-    button.isToggled = true
+local function toggle(button)
+  if(button ~= nil) then
+    button:setStrokeColor(unpack(Color.green))
   end
+end
+
+local function untoggle(button)
+  if(button ~= nil) then
+    button:setStrokeColor(unpack(Color.gray))
+  end
+end
+
+function Panel:onToggleButton(event)
+  if (self.toggled == event.target) then
+    untoggle(event.target)
+    self.toggled = nil
+  else
+    untoggle(self.toggled)
+    toggle(event.target)
+    self.toggled = event.target
+  end
+end
+
+function Panel:drawBlock(x, y)
+  local block = self.toggled.BlockClass:new({xPos = x, yPos = y})
+  block:init()
+  return block
 end
 
 function Panel:drawButtons()
   for i = 0, 3 do
     local button = display.newRect(
-    i * self.width / 5,
-    self.width / 5,
-    self.width / 5 * 0.8,
-    self.width / 5 * 0.8
+      i * self.width / 5,
+      self.width / 5,
+      self.width / 5 * 0.8,
+      self.width / 5 * 0.8
     )
 
     button:setStrokeColor(unpack(Color.gray))
-    button.strokeWidth = 5
-    button:setFillColor(unpack(self.btnInfo[i].color))
-    button.isToggled = false
-    button:addEventListener('tap', onToggleButton)
+    button.strokeWidth = 10
+    button:setFillColor(unpack(buttons[i].rgb))
+    button.color = buttons[i].color
+    button.BlockClass = buttons[i].BlockClass
+    button:addEventListener('tap', function(event) self:onToggleButton(event) end)
     self.panelGroup:insert(button)
   end
 end
