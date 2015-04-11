@@ -53,8 +53,9 @@ function Arena:drawWalls()
   self.displayGroup:insert(bottom)
 end
 
-function Arena:addBlock(x, y)
-  self:drawBlock(x, y)
+function Arena:addBlock(block)
+  self.blocks[#self.blocks + 1] = block
+  print(#self.blocks)
 end
 
 function Arena:drawPaddle()

@@ -13,11 +13,11 @@ local Panel = {
   panelGroup = display.newGroup()
 }
 
-local buttons = {
-    [0] = {color = 'red', rgb = Color.red, BlockClass = BlockRed},
-    [1] = {color = 'blue', rgb = Color.blue, BlockClass = BlockBlue},
-    [2] = {color = 'yellow', rgb = Color.yellow, BlockClass = BlockYellow},
-    [3] = {color = 'gray', rgb = Color.lightGray, BlockClass = BlockGray},
+local blockButtons = {
+    [0] = {rgb = Color.red, BlockClass = BlockRed},
+    [1] = {rgb = Color.blue, BlockClass = BlockBlue},
+    [2] = {rgb = Color.yellow, BlockClass = BlockYellow},
+    [3] = {rgb = Color.lightGray, BlockClass = BlockGray},
 }
 
 function Panel:new(o)
@@ -56,23 +56,50 @@ function Panel:drawBlock(x, y)
   return block
 end
 
-function Panel:drawButtons()
-  for i = 0, 3 do
-    local button = display.newRect(
+local function drawButton(xPos, yPos, height, width, rgb)
+  local button = display.newRect(xPos, yPos, height, width)
+  button:setStrokeColor(unpack(Color.gray))
+  button.strokeWidth = 10
+  button:setFillColor(unpack(rgb))
+
+  return button
+end
+
+function Panel:drawBlockButtons(blockButtons, height, width)
+  local len = #blockButtons
+  for i = 0, len do
+    local button = drawButton(
       i * self.width / 5,
       self.width / 5,
-      self.width / 5 * 0.8,
-      self.width / 5 * 0.8
+      height,
+      width,
+      blockButtons[i].rgb
     )
-
-    button:setStrokeColor(unpack(Color.gray))
-    button.strokeWidth = 10
-    button:setFillColor(unpack(buttons[i].rgb))
-    button.color = buttons[i].color
-    button.BlockClass = buttons[i].BlockClass
+    button.BlockClass = blockButtons[i].BlockClass
     button:addEventListener('tap', function(event) self:onToggleButton(event) end)
     self.panelGroup:insert(button)
-  end
+  end  
+end
+
+function Panel:drawStartButton(offset, width, height)
+  local startButton = drawButton(
+    offset * self.width / 5, 
+    self.width / 5, 
+    height, 
+    width, 
+    Color.black
+  )
+
+  self.panelGroup:insert(startButton)  
+end
+
+function Panel:drawButtons()
+  local height = self.width / 5 * 0.8
+  local width = self.width / 5 * 0.8
+  local startOffset = #blockButtons + 1
+
+  self:drawBlockButtons(blockButtons, width, height)
+  self:drawStartButton(startOffset, width, height)
 end
 
 function Panel:draw()
