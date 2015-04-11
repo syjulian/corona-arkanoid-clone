@@ -1,5 +1,4 @@
 Color = require('Color')
-Block = require('Block') 
 
 local Arena = {
   height = display.contentHeight,

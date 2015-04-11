@@ -1,7 +1,6 @@
 local composer = require('composer')
 local Arena = require('Arena')
 local Panel = require('Panel')
-local Block = require('Block')
 local Ball = require('Ball')
 
 local gameScene = composer.newScene()
