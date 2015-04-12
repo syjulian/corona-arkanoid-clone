@@ -12,7 +12,7 @@ function Ball:new(o)
 end
 
 function Ball:init(o)
-  Ball:draw()
+  self:draw()
 end
 
 function Ball:draw()

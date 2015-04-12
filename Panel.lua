@@ -39,7 +39,7 @@ local function untoggle(button)
   end
 end
 
-function Panel:onToggleButton(event)
+function Panel:onToggleBlockButton(event)
   if (self.toggled == event.target) then
     untoggle(event.target)
     self.toggled = nil
@@ -48,6 +48,15 @@ function Panel:onToggleButton(event)
     toggle(event.target)
     self.toggled = event.target
   end
+end
+
+function Panel:onToggleStartButton(event)
+  toggle(event.target)
+
+  startEvent = {
+    name = "start"
+  }
+  Runtime:dispatchEvent(startEvent)
 end
 
 function Panel:drawBlock(x, y)
@@ -76,7 +85,7 @@ function Panel:drawBlockButtons(blockButtons, height, width)
       blockButtons[i].rgb
     )
     button.BlockClass = blockButtons[i].BlockClass
-    button:addEventListener('tap', function(event) self:onToggleButton(event) end)
+    button:addEventListener('tap', function(event) self:onToggleBlockButton(event) end)
     self.panelGroup:insert(button)
   end  
 end
@@ -89,7 +98,7 @@ function Panel:drawStartButton(offset, width, height)
     width, 
     Color.black
   )
-
+  startButton:addEventListener('tap', function(event) self:onToggleStartButton(event) end)
   self.panelGroup:insert(startButton)  
 end
 
@@ -112,6 +121,10 @@ end
 
 function Panel:init()
   self:draw()
+end
+
+function Panel:teardown()
+  self.panelGroup:removeSelf()
 end
 
 return Panel
