@@ -10,7 +10,7 @@ gameScene.arena = Arena:new()
 gameScene.panel = Panel:new()
 gameScene.countDown = CountDown
 
-function gameScene:onBgTouch(event)
+function gameScene:arenaTap(event)
   if(self.panel.toggled ~= nil) then
     local block = self.panel:drawBlock(event.x,event.y)
     
@@ -18,22 +18,39 @@ function gameScene:onBgTouch(event)
   end
 end
 
+function gameScene:startGame()
+  gameScene.arena:startGame()
+end
+
 function gameScene:onStart(event)
-  gameScene.countDown:init(4, display.contentCenterX, 0)
+  local countDownSec = 4
+  gameScene.countDown:init(countDownSec, display.contentCenterX, 0)
+  timer.performWithDelay(countDownSec * 1000, function() self:startGame() end, 1)
   gameScene.countDown:start()
   self.panel:teardown()
+  self.arena.displayGroup:removeEventListener('tap', self.arena.displayGroup)
+  self:removeEventListener('arenaTap', self)
+end
+
+function gameScene.arena.displayGroup:tap(event)
+  local arenaTapEvent = {
+    name = 'arenaTap',
+    x = event.x,
+    y = event.y
+  }
+
+  gameScene:dispatchEvent(arenaTapEvent)
 end
 
 function gameScene:create(event)
   self.arena:init()
   self.panel:init()
+  self.arena.displayGroup:addEventListener('tap', self.arena.displayGroup)
+  self:addEventListener('arenaTap', self)
 end
 
 function gameScene:show(event)
   if(event.phase == 'will') then
-    self.arena.displayGroup:addEventListener(
-      'tap', function(event) self:onBgTouch(event) end
-    )
     Runtime:addEventListener('start', function() self:onStart() end)
   elseif(event.phase == 'did') then
     --

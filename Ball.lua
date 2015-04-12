@@ -1,7 +1,7 @@
 local Ball = {
   radius = 20,
-  x = 0,
-  y = 0
+  xPos = display.contentCenterX - 100,
+  yPos = display.contentCenterY + 100
 }
 
 function Ball:new(o)
@@ -16,7 +16,11 @@ function Ball:init(o)
 end
 
 function Ball:draw()
-  self.shape = display.newCircle(self.xPos, self.yPos, self.radius)
+  self.shape = display.newCircle(
+    self.xPos, 
+    self.yPos, 
+    self.radius
+  )
 end
 
 return Ball

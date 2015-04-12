@@ -1,11 +1,17 @@
 Color = require('Color')
+Paddle = require('Paddle')
+Ball = require('Ball')
+physics = require('physics')
+physics.start()
+physics.setGravity(0, 0)
 
 local Arena = {
   height = display.contentHeight,
   width = display.contentWidth,
   thickness = 20,
   displayGroup = display.newGroup(),
-  blocks = {}
+  blocks = {},
+  physics = physics
 }
 
 function Arena:new(o)
@@ -51,34 +57,57 @@ function Arena:drawWalls()
   self.displayGroup:insert(left)
   self.displayGroup:insert(right)
   self.displayGroup:insert(bottom)
+
+  self.physics.addBody(top, 'static')
+  self.physics.addBody(left, 'static')
+  self.physics.addBody(right, 'static')
+  self.physics.addBody(bottom, 'static')
 end
 
 function Arena:addBlock(block)
   self.blocks[#self.blocks + 1] = block
-  print(#self.blocks)
+  self.physics.addBody(block.shape, 'static')
 end
 
 function Arena:drawPaddle()
-  local paddle = 
-    display.newRect(
-      self.width / 2, 
-      self.height * 0.8, 
-      self.width / 4, 
-      self.thickness
-    )
+  paddle = Paddle:new()
+  paddle:init()
 
-  paddle:setFillColor(unpack(Color.gray))
-  self.displayGroup:insert(paddle)
+  self.displayGroup:insert(paddle.shape)
+  self.physics.addBody(paddle.shape, 'static')
+  self.paddle = paddle
 end
 
-function Arena:draw()
+function Arena:drawSetup()
   self:drawBg()
   self:drawWalls()
   self:drawPaddle()
 end
 
+function Arena:drawBall()
+  ball = Ball:new()
+  ball:init()
+
+  self.displayGroup:insert(ball.shape)
+  self.physics.addBody(
+    ball.shape, 
+    'dynamic', 
+    {
+      bounce = 1,
+      radius = ball.radius
+    }
+  )
+  self.ball = ball
+end
+
 function Arena:init()
-  self:draw()
+  self:drawSetup()
+end
+
+function Arena:startGame()
+  self.paddle:activate()
+  self:drawBall()
+  self.ball.shape:applyForce(1,2,self.ball.shape.x,ball.shape.y);
 end
 
 return Arena
