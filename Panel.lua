@@ -11,7 +11,8 @@ local Panel = {
   yPos = display.contentHeight + display.contentWidth / 8,
   toggled = nil,
   panelGroup = display.newGroup(),
-  counters = {}
+  counters = {},
+  blocks = {}
 }
 
 local blockButtons = {
@@ -73,25 +74,10 @@ function Panel:noMoreBlocks()
   return blocksLeft <= 0
 end
 
-function Panel:handleBlockCollision(color, shape)
-  shape:removeSelf()
-  self.counters[color] = self.counters[color] - 1
-  print(self.counters[color])
-
-  if(self:noMoreBlocks()) then 
-    local winEvent = {
-      name = 'win'
-    }
-    Runtime:dispatchEvent(winEvent)
-  end
-end
-
-
-function Panel:drawBlock(x, y)
-  local block = self.toggled.BlockClass:new({xPos = x, yPos = y})
+function Panel:drawBlock(blockClass, x, y)
+  local block = blockClass:new({xPos = x, yPos = y})
   block:init()
   self.counters[block.color] = self.counters[block.color] + 1
-  print(self.counters[block.color])
   return block
 end
 
@@ -151,8 +137,52 @@ function Panel:draw()
   self:drawButtons()
 end
 
+function Panel:yellowCollision(event)
+  self.counters[event.shape.color] = self.counters[event.shape.color] - 1
+  if(self:noMoreBlocks()) then 
+    local winEvent = {
+      name = 'win'
+    }
+    Runtime:dispatchEvent(winEvent)
+  end
+
+  local swapRedBlueEvent = {
+    name = 'swapRedBlue',
+    shape = event.shape
+  }
+  Runtime:dispatchEvent(swapRedBlueEvent)
+end
+
+function Panel:blueCollision(event)
+  self.counters[event.shape.color] = self.counters[event.shape.color] - 1
+  makeRedEvent = {
+    name = 'makeRed',
+    x = event.shape.x,
+    y = event.shape.y,
+    blockClass = blockButtons[0].BlockClass
+  }
+  Runtime:dispatchEvent(makeRedEvent)
+end
+
+function Panel:redCollision(event)
+  self.counters[event.shape.color] = self.counters[event.shape.color] - 1
+  if(self:noMoreBlocks()) then
+    local winEvent = {
+      name = 'win'
+    }
+    Runtime:dispatchEvent(winEvent)
+  end
+end
+
+function Panel:addBlockListeners()
+  Runtime:addEventListener('yellowCollision', self)
+  Runtime:addEventListener('blueCollision', self)
+  Runtime:addEventListener('redCollision', self)
+end
+
 function Panel:init()
   self:draw()
+  self:addBlockListeners()
 end
 
 function Panel:teardown()

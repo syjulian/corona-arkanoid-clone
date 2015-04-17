@@ -11,7 +11,8 @@ local Arena = {
   thickness = 20,
   displayGroup = display.newGroup(),
   physics = physics,
-  lives = 5
+  lives = 5,
+  shapes = {}
 }
 
 function Arena:new(o)
@@ -78,8 +79,11 @@ function Arena:drawWalls()
 end
 
 function Arena:addShape(shape)
-  self.physics.addBody(shape, { density = 100.0})
-  shape.isFixedRotation = true
+  timer.performWithDelay(10, function()
+    self.physics.addBody(shape, { density = 100.0})
+    shape.isFixedRotation = true
+    self.shapes[#self.shapes + 1] = shape
+  end)
 end
 
 function Arena:drawPaddle()

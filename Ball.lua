@@ -13,22 +13,8 @@ function Ball:new(o)
   return o
 end
 
-local function ballCollision (event)
-  if(event.phase == 'began') then
-    if(event.other.type == 'block') then
-      blockCollisionEvent = {
-        name = 'blockCollision',
-        color = event.other.color,
-        shape = event.other
-      }
-      Runtime:dispatchEvent(blockCollisionEvent)
-    end
-  end
-end
-
 function Ball:init(o)
   self:draw()
-  self.shape:addEventListener('collision', ballCollision)
 end
 
 function Ball:draw()
@@ -40,6 +26,7 @@ function Ball:draw()
   self.shape:setStrokeColor(unpack(Color.black))
   self.shape.strokeWidth = 5
   self.shape:setFillColor(unpack(Color.green))
+  self.shape.type = 'ball'
 end
 
 return Ball

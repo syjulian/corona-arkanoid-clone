@@ -5,4 +5,8 @@ local BlockGray = Block:new({
   rgb = Color.lightGray
 })
 
+function BlockGray:addCollisionHandler()
+  self.shape:addEventListener('collision', function() end)
+end
+
 return BlockGray

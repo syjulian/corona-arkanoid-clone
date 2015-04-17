@@ -10,11 +10,23 @@ gameScene.arena = Arena:new()
 gameScene.panel = Panel:new()
 gameScene.countDown = CountDown
 
-function gameScene:arenaTap(event)
+function gameScene:newBlock(blockClass, x, y)
+  local block = self.panel:drawBlock(blockClass, x, y)
+  self.arena:addShape(block.shape)
+end
+
+function gameScene:swapRedBlue(event)
+  
+end
+
+function gameScene:makeRed(event)
+  self:newBlock(event.blockClass, event.x, event.y)
+end
+
+function gameScene:arenaTap(event)  
   if(self.panel.toggled ~= nil) then
-    local block = self.panel:drawBlock(event.x,event.y)
-    
-    self.arena:addShape(block.shape)
+    local blockClass = self.panel.toggled.BlockClass
+    local block = self:newBlock(blockClass, event.x, event.y)
   end
 end
 
@@ -40,10 +52,6 @@ function gameScene.arena.displayGroup:tap(event)
   }
 
   gameScene:dispatchEvent(arenaTapEvent)
-end
-
-function gameScene:blockCollision(event)
-  self.panel:handleBlockCollision(event.color, event.shape)
 end
 
 function gameScene:win(event)
@@ -72,8 +80,9 @@ end
 function gameScene:show(event)
   if(event.phase == 'will') then
     Runtime:addEventListener('start', gameScene)
-    Runtime:addEventListener('blockCollision', gameScene)
     Runtime:addEventListener('win', gameScene)
+    Runtime:addEventListener('makeRed', gameScene)
+    Runtime:addEventListener('swapRedBlue', gameScene)
   elseif(event.phase == 'did') then
     --
   end

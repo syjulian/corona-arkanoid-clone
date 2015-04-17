@@ -31,10 +31,27 @@ local function move(event)
   end
 end
 
+function Block:addCollisionHandler()
+  self.shape:addEventListener(
+    'collision', 
+    function(event)
+      if(event.phase == 'began') then
+        if(event.other.type == 'ball') then
+          colorCollisionEvent = {
+            name = self.color .. 'Collision',
+            shape = self.shape
+          }
+          Runtime:dispatchEvent(colorCollisionEvent)
+          self.shape:removeSelf()
+        end
+      end
+  end)
+end
+
 function Block:init()
   self:draw()
+  self:addCollisionHandler()
   self.shape:addEventListener('touch', move)
-  self.shape:addEventListener('collision', self.shape)
 end
 
 
