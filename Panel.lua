@@ -64,7 +64,10 @@ function Panel:noMoreBlocks()
   local blocksLeft = 0
   local len = #blockButtons
   for i = 0, len do
-    blocksLeft = blocksLeft + self.counters[blockButtons[i].color]
+    color = blockButtons[i].color
+    if(color ~= 'gray') then
+      blocksLeft = blocksLeft + self.counters[color]
+    end
   end
 
   return blocksLeft <= 0

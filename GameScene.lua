@@ -54,7 +54,7 @@ function gameScene:win(event)
     native.systemFontBold,
     display.contentWidth / 5
   )
-  self.arena:removeBall()
+  self.arena:endGame()
 end
 
 function gameScene:create(event)

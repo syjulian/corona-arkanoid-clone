@@ -6,11 +6,12 @@ physics.start()
 physics.setGravity(0, 0)
 
 local Arena = {
-  height = display.contentHeight,
+  height = display.contentHeight - 50,
   width = display.contentWidth,
   thickness = 20,
   displayGroup = display.newGroup(),
-  physics = physics
+  physics = physics,
+  lives = 5
 }
 
 function Arena:new(o)
@@ -22,7 +23,7 @@ end
 
 function Arena:drawBg()
   local bg =
-    display.newRect(0,0,self.width, self.height)
+    display.newRect(0,50,self.width, self.height)
   bg.anchorX = 0
   bg.anchorY = 0
 
@@ -30,15 +31,28 @@ function Arena:drawBg()
   self.displayGroup:insert(bg)
 end
 
+function Arena:drawScoreboard()
+  local livesText = display.newText(
+    'Lives: ' .. self.lives, 
+    self.width / 2, 0, 
+    native.systemFontBold, 72)
+  self.scoreboard = livesText
+end
+
+function Arena:removeScoreboard()
+  self.scoreboard:removeSelf()
+  self.scoreboard = nil
+end
+
 function Arena:drawWalls()
   local top =
-    display.newRect(0, 0,self.width, self.thickness)
+    display.newRect(0, 50,self.width, self.thickness)
   local left =
-    display.newRect(0,0,self.thickness, self.height)
+    display.newRect(0, 50,self.thickness, self.height)
   local right =
-    display.newRect(self.width-self.thickness,0,self.thickness,self.height)
+    display.newRect(self.width-self.thickness, 50,self.thickness,self.height)
   local bottom =
-    display.newRect(0,self.height, self.width, self.thickness)
+    display.newRect(0,self.height + 50, self.width, self.thickness)
   top.anchorX = 0
   top.anchorY = 0
   left.anchorX = 0
@@ -112,7 +126,13 @@ end
 function Arena:startGame()
   self.paddle:activate()
   self:drawBall()
+  self:drawScoreboard()
   self.ball.shape:applyForce(1,2,self.ball.shape.x,ball.shape.y);
+end
+
+function Arena:endGame()
+  self:removeBall()
+  self:removeScoreboard()
 end
 
 return Arena
