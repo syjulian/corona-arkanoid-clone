@@ -89,13 +89,14 @@ function Arena:drawBall()
 
   self.displayGroup:insert(ball.shape)
   self.physics.addBody(
-    ball.shape, 
-    'dynamic', 
+    ball.shape,
+    'dynamic',
     {
       bounce = 1,
       radius = ball.radius
     }
   )
+  ball.shape:applyForce( 1, 2, ball.x, ball.y);
   self.ball = ball
 end
 

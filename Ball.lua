@@ -1,3 +1,5 @@
+local Color = require('Color')
+
 local Ball = {
   radius = 20,
   xPos = display.contentCenterX - 100,
@@ -14,7 +16,12 @@ end
 local function ballCollision (event)
   if(event.phase == 'began') then
     if(event.other.type == 'block') then
-      event.other:removeSelf()
+      blockCollisionEvent = {
+        name = 'blockCollision',
+        color = event.other.color,
+        shape = event.other
+      }
+      Runtime:dispatchEvent(blockCollisionEvent)
     end
   end
 end
@@ -26,11 +33,13 @@ end
 
 function Ball:draw()
   self.shape = display.newCircle(
-    self.xPos, 
-    self.yPos, 
+    self.xPos,
+    self.yPos,
     self.radius
   )
+  self.shape:setStrokeColor(unpack(Color.black))
+  self.shape.strokeWidth = 5
+  self.shape:setFillColor(unpack(Color.green))
 end
 
 return Ball
-

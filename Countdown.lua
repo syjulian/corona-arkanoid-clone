@@ -8,7 +8,13 @@ function CountDown:count()
   self.timeLeft.text = self.timeLimit
 
   if(self.timeLimit == 0)then
-    self.timeLeft:removeSelf()
+    self.timeLeft.text = "GO!"                             
+    timer.performWithDelay(
+      500, 
+      function() 
+        self.timeLeft:removeSelf()
+      end
+    )
   end
 
   timer.performWithDelay(

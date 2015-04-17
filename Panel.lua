@@ -61,6 +61,10 @@ function Panel:onToggleStartButton(event)
   Runtime:dispatchEvent(startEvent)
 end
 
+function Panel:handleBlockCollision(color, shape)
+  shape:removeSelf()
+end
+
 function Panel:drawBlock(x, y)
   local block = self.toggled.BlockClass:new({xPos = x, yPos = y})
   block:init()
@@ -92,19 +96,19 @@ function Panel:drawBlockButtons(blockButtons, height, width)
     button:addEventListener('tap', function(event) self:onToggleBlockButton(event) end)
     self.panelGroup:insert(button)
     self.containers[blockButtons[i].color] = {}
-  end  
+  end
 end
 
 function Panel:drawStartButton(offset, width, height)
   local startButton = drawButton(
-    offset * self.width / 5, 
-    self.width / 5, 
-    height, 
-    width, 
+    offset * self.width / 5,
+    self.width / 5,
+    height,
+    width,
     Color.black
   )
   startButton:addEventListener('tap', function(event) self:onToggleStartButton(event) end)
-  self.panelGroup:insert(startButton)  
+  self.panelGroup:insert(startButton)
 end
 
 function Panel:drawButtons()

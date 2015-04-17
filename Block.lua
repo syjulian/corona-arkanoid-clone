@@ -34,12 +34,17 @@ end
 function Block:init()
   self:draw()
   self.shape:addEventListener('touch', move)
+  self.shape:addEventListener('collision', self.shape)
 end
+
 
 function Block:draw()
   self.shape = display.newRect(self.xPos, self.yPos, self.length, self.width)
   self.shape:setFillColor(unpack(self.rgb))
   self.shape.type = 'block'
+  self.shape.color = self.color
+  self.shape:setStrokeColor(unpack(Color.black))
+  self.shape.strokeWidth = 5
 end
 
 return Block

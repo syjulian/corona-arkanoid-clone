@@ -20,7 +20,10 @@ end
 
 function Paddle:draw()
   self.shape = display.newRect(self.xPos, self.yPos, self.length, self.width)
+  self.shape:setStrokeColor(unpack(Color.black))
+  self.shape.strokeWidth = 5
   self.shape:setFillColor(unpack(Color.gray))
+  
 end
 
 local function move (shape, event)

@@ -22,7 +22,7 @@ function gameScene:startGame()
   gameScene.arena:startGame()
 end
 
-function gameScene:onStart(event)
+function gameScene:start(event)
   local countDownSec = 4
   gameScene.countDown:init(countDownSec, display.contentCenterX, 0)
   timer.performWithDelay(countDownSec * 1000, function() self:startGame() end, 1)
@@ -42,16 +42,26 @@ function gameScene.arena.displayGroup:tap(event)
   gameScene:dispatchEvent(arenaTapEvent)
 end
 
+function gameScene:blockCollision(event)
+  self.panel:handleBlockCollision(event.color, event.shape)
+end
+
 function gameScene:create(event)
+  local sceneGroup = self.view
+
   self.arena:init()
   self.panel:init()
   self.arena.displayGroup:addEventListener('tap', self.arena.displayGroup)
   self:addEventListener('arenaTap', self)
+
+  sceneGroup:insert(self.arena.displayGroup)
+  sceneGroup:insert(self.panel.panelGroup)
 end
 
 function gameScene:show(event)
   if(event.phase == 'will') then
-    Runtime:addEventListener('start', function() self:onStart() end)
+    Runtime:addEventListener('start', gameScene)
+    Runtime:addEventListener('blockCollision', gameScene)
   elseif(event.phase == 'did') then
     --
   end
