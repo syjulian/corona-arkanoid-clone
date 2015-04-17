@@ -10,14 +10,16 @@ local Panel = {
   xPos = display.contentWidth / 2,
   yPos = display.contentHeight + display.contentWidth / 8,
   toggled = nil,
-  panelGroup = display.newGroup()
+  panelGroup = display.newGroup(),
+  containers = {
+  }
 }
 
 local blockButtons = {
-    [0] = {rgb = Color.red, BlockClass = BlockRed},
-    [1] = {rgb = Color.blue, BlockClass = BlockBlue},
-    [2] = {rgb = Color.yellow, BlockClass = BlockYellow},
-    [3] = {rgb = Color.lightGray, BlockClass = BlockGray},
+    [0] = {color = 'red', rgb = Color.red, BlockClass = BlockRed},
+    [1] = {color = 'blue', rgb = Color.blue, BlockClass = BlockBlue},
+    [2] = {color = 'yellow', rgb = Color.yellow, BlockClass = BlockYellow},
+    [3] = {color = 'gray', rgb = Color.lightGray, BlockClass = BlockGray},
 }
 
 function Panel:new(o)
@@ -62,6 +64,8 @@ end
 function Panel:drawBlock(x, y)
   local block = self.toggled.BlockClass:new({xPos = x, yPos = y})
   block:init()
+  local container = self.containers[block.color]
+  container[#container + 1] = block
   return block
 end
 
@@ -87,6 +91,7 @@ function Panel:drawBlockButtons(blockButtons, height, width)
     button.BlockClass = blockButtons[i].BlockClass
     button:addEventListener('tap', function(event) self:onToggleBlockButton(event) end)
     self.panelGroup:insert(button)
+    self.containers[blockButtons[i].color] = {}
   end  
 end
 

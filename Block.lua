@@ -20,10 +20,14 @@ local function move(event)
     event.target.markX = event.target.x
     event.target.markY = event.target.y
   elseif event.phase == 'moved' then
-    local x = (event.x - event.xStart) + event.target.markX
-    local y = (event.y - event.yStart) + event.target.markY
-    event.target.x = x;
-		event.target.y = y;
+    if (event.target.markX ~= nil) then
+      local x = (event.x - event.xStart) + event.target.markX
+      event.target.x = x;
+    end
+    if (event.target.markY ~= nil) then
+      local y = (event.y - event.yStart) + event.target.markY
+      event.target.y = y;
+    end
   end
 end
 
@@ -35,6 +39,7 @@ end
 function Block:draw()
   self.shape = display.newRect(self.xPos, self.yPos, self.length, self.width)
   self.shape:setFillColor(unpack(self.rgb))
+  self.shape.type = 'block'
 end
 
 return Block

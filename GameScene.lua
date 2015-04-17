@@ -14,7 +14,7 @@ function gameScene:arenaTap(event)
   if(self.panel.toggled ~= nil) then
     local block = self.panel:drawBlock(event.x,event.y)
     
-    self.arena:addBlock(block)
+    self.arena:addShape(block.shape)
   end
 end
 

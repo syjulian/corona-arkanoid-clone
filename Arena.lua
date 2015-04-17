@@ -10,7 +10,6 @@ local Arena = {
   width = display.contentWidth,
   thickness = 20,
   displayGroup = display.newGroup(),
-  blocks = {},
   physics = physics
 }
 
@@ -64,9 +63,9 @@ function Arena:drawWalls()
   self.physics.addBody(bottom, 'static')
 end
 
-function Arena:addBlock(block)
-  self.blocks[#self.blocks + 1] = block
-  self.physics.addBody(block.shape, 'static')
+function Arena:addShape(shape)
+  self.physics.addBody(shape, { density = 100.0})
+  shape.isFixedRotation = true
 end
 
 function Arena:drawPaddle()
