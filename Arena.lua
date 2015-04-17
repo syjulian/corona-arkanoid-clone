@@ -100,6 +100,11 @@ function Arena:drawBall()
   self.ball = ball
 end
 
+function Arena:removeBall()
+  self.ball.shape:removeSelf()
+  self.ball = nil
+end
+
 function Arena:init()
   self:drawSetup()
 end

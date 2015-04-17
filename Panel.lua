@@ -11,8 +11,7 @@ local Panel = {
   yPos = display.contentHeight + display.contentWidth / 8,
   toggled = nil,
   panelGroup = display.newGroup(),
-  containers = {
-  }
+  counters = {}
 }
 
 local blockButtons = {
@@ -61,15 +60,35 @@ function Panel:onToggleStartButton(event)
   Runtime:dispatchEvent(startEvent)
 end
 
+function Panel:noMoreBlocks()
+  local blocksLeft = 0
+  local len = #blockButtons
+  for i = 0, len do
+    blocksLeft = blocksLeft + self.counters[blockButtons[i].color]
+  end
+
+  return blocksLeft <= 0
+end
+
 function Panel:handleBlockCollision(color, shape)
   shape:removeSelf()
+  self.counters[color] = self.counters[color] - 1
+  print(self.counters[color])
+
+  if(self:noMoreBlocks()) then 
+    local winEvent = {
+      name = 'win'
+    }
+    Runtime:dispatchEvent(winEvent)
+  end
 end
+
 
 function Panel:drawBlock(x, y)
   local block = self.toggled.BlockClass:new({xPos = x, yPos = y})
   block:init()
-  local container = self.containers[block.color]
-  container[#container + 1] = block
+  self.counters[block.color] = self.counters[block.color] + 1
+  print(self.counters[block.color])
   return block
 end
 
@@ -94,8 +113,9 @@ function Panel:drawBlockButtons(blockButtons, height, width)
     )
     button.BlockClass = blockButtons[i].BlockClass
     button:addEventListener('tap', function(event) self:onToggleBlockButton(event) end)
+    self.counters[blockButtons[i].color] = 0
     self.panelGroup:insert(button)
-    self.containers[blockButtons[i].color] = {}
+
   end
 end
 

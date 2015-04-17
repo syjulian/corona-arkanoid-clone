@@ -46,6 +46,17 @@ function gameScene:blockCollision(event)
   self.panel:handleBlockCollision(event.color, event.shape)
 end
 
+function gameScene:win(event)
+  local winText = display.newText(
+    'You Win!',
+    display.contentCenterX,
+    0,
+    native.systemFontBold,
+    display.contentWidth / 5
+  )
+  self.arena:removeBall()
+end
+
 function gameScene:create(event)
   local sceneGroup = self.view
 
@@ -62,6 +73,7 @@ function gameScene:show(event)
   if(event.phase == 'will') then
     Runtime:addEventListener('start', gameScene)
     Runtime:addEventListener('blockCollision', gameScene)
+    Runtime:addEventListener('win', gameScene)
   elseif(event.phase == 'did') then
     --
   end

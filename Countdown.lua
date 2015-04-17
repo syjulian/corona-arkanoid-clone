@@ -8,9 +8,26 @@ function CountDown:count()
   self.timeLeft.text = self.timeLimit
 
   if(self.timeLimit == 0)then
-    self.timeLeft.text = "GO!"                             
+    self.timeLeft.text = "GO!"
+
+    self.timeLeft:setTextColor(unpack(Color.green))
     timer.performWithDelay(
-      500, 
+      200,function()
+        self.timeLeft:setTextColor(unpack(Color.yellow))
+        end
+    )
+    timer.performWithDelay(
+      400,function()
+        self.timeLeft:setTextColor(unpack(Color.red))
+        end
+    )
+    timer.performWithDelay(
+      600,function()
+        self.timeLeft:setTextColor(unpack(Color.blue))
+        end
+    )
+    timer.performWithDelay(
+      800, 
       function() 
         self.timeLeft:removeSelf()
       end
