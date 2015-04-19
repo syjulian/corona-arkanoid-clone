@@ -148,7 +148,9 @@ function Panel:yellowCollision(event)
 
   local swapRedBlueEvent = {
     name = 'swapRedBlue',
-    shape = event.shape
+    shape = event.shape,
+    redBlockClass = blockButtons[0].BlockClass,
+    blueBlockClass = blockButtons[1].BlockClass
   }
   Runtime:dispatchEvent(swapRedBlueEvent)
 end

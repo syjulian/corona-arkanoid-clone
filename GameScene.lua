@@ -16,7 +16,7 @@ function gameScene:newBlock(blockClass, x, y)
 end
 
 function gameScene:swapRedBlue(event)
-  
+  self.arena:swapRedBlueShapes(event.redBlockClass, event.blueBlockClass)
 end
 
 function gameScene:makeRed(event)
@@ -54,15 +54,21 @@ function gameScene.arena.displayGroup:tap(event)
   gameScene:dispatchEvent(arenaTapEvent)
 end
 
+function gameScene:bottomCollision()
+  gameScene.arena:loseLife()
+end
+
 function gameScene:win(event)
   local winText = display.newText(
     'You Win!',
     display.contentCenterX,
-    0,
+    display.contentCenterY,
     native.systemFontBold,
     display.contentWidth / 5
   )
-  self.arena:endGame()
+  self.arena:removePaddle()
+  self.arena:removeBall()
+  self.arena:gameOver()
 end
 
 function gameScene:create(event)
@@ -83,6 +89,7 @@ function gameScene:show(event)
     Runtime:addEventListener('win', gameScene)
     Runtime:addEventListener('makeRed', gameScene)
     Runtime:addEventListener('swapRedBlue', gameScene)
+    Runtime:addEventListener('bottomCollision', gameScene)
   elseif(event.phase == 'did') then
     --
   end

@@ -54,7 +54,6 @@ function Block:init()
   self.shape:addEventListener('touch', move)
 end
 
-
 function Block:draw()
   self.shape = display.newRect(self.xPos, self.yPos, self.length, self.width)
   self.shape:setFillColor(unpack(self.rgb))

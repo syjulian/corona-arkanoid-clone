@@ -23,7 +23,6 @@ function Paddle:draw()
   self.shape:setStrokeColor(unpack(Color.black))
   self.shape.strokeWidth = 5
   self.shape:setFillColor(unpack(Color.gray))
-  
 end
 
 local function move (shape, event)
