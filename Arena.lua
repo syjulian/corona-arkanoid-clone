@@ -56,28 +56,38 @@ function Arena:swapRedBlueShapes(redBlockClass, blueBlockClass)
     local x = self.shapes[i].x
     local y = self.shapes[i].y
     if(self.shapes[i].color == 'red') then
-      blueBlock = blueBlockClass:new({
-          xPos = x,
-          yPos = y
-      })
-      blueBlock:init()
-      local shape = blueBlock.shape
-      self.shapes[i]:removeSelf()
-      self.shapes[i] = nil
-      self.shapes[i] = shape
-      Arena:addShape(self.shapes[i])
+        self.shapes[i]:removeSelf()
+        self.shapes[i] = nil
+        blueBlock = blueBlockClass:new({
+            xPos = x,
+            yPos = y
+        })
+        blueBlock:init()
+        local shape = blueBlock.shape
+        self.shapes[i] = shape
+        timer.performWithDelay(
+          10, 
+          function()
+            self.physics.addBody(shape, 'dynamic', {density = 100})
+          end
+        )
     elseif(self.shapes[i].color == 'blue') then
-      redBlock = redBlockClass:new({
-          xPos = x,
-          yPos = y
-      })
-      redBlock:init()
-      local shape = redBlock.shape
-      self.shapes[i]:removeSelf()
-      self.shapes[i] = nil
-      self.shapes[i] = shape
-      Arena:addShape(self.shapes[i])
-    end
+        self.shapes[i]:removeSelf()
+        self.shapes[i] = nil
+        redBlock = redBlockClass:new({
+            xPos = x,
+            yPos = y
+        })
+        redBlock:init()
+        local shape = redBlock.shape
+        self.shapes[i] = shape
+        timer.performWithDelay(
+          10, 
+          function()
+            self.physics.addBody(shape, 'dynamic', {density = 100})
+          end
+        )
+      end
   end
 end
 

@@ -43,6 +43,7 @@ function Block:addCollisionHandler()
           }
           Runtime:dispatchEvent(colorCollisionEvent)
           self.shape:removeSelf()
+          self.shape.color = nil
         end
       end
   end)
