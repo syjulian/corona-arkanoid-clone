@@ -15,6 +15,7 @@ local Panel = {
   blocks = {}
 }
 
+-- table of different button metadata
 local blockButtons = {
     [0] = {color = 'red', rgb = Color.red, BlockClass = BlockRed},
     [1] = {color = 'blue', rgb = Color.blue, BlockClass = BlockBlue},
@@ -29,6 +30,7 @@ function Panel:new(o)
   return o
 end
 
+-- toggle to change outline 
 local function toggle(button)
   if(button ~= nil) then
     button:setStrokeColor(unpack(Color.green))
@@ -41,6 +43,7 @@ local function untoggle(button)
   end
 end
 
+-- toggle of untoggled and vice versa
 function Panel:onToggleBlockButton(event)
   if (self.toggled == event.target) then
     untoggle(event.target)
@@ -52,6 +55,7 @@ function Panel:onToggleBlockButton(event)
   end
 end
 
+-- handler for tapping start button
 function Panel:onToggleStartButton(event)
   toggle(event.target)
 
@@ -61,6 +65,7 @@ function Panel:onToggleStartButton(event)
   Runtime:dispatchEvent(startEvent)
 end
 
+-- check if all blocks are gone
 function Panel:noMoreBlocks()
   local blocksLeft = 0
   local len = #blockButtons
@@ -74,6 +79,7 @@ function Panel:noMoreBlocks()
   return blocksLeft <= 0
 end
 
+-- draw block
 function Panel:drawBlock(blockClass, x, y)
   local block = blockClass:new({xPos = x, yPos = y})
   block:init()
@@ -81,6 +87,7 @@ function Panel:drawBlock(blockClass, x, y)
   return block
 end
 
+-- draw simple button
 local function drawButton(xPos, yPos, height, width, rgb)
   local button = display.newRect(xPos, yPos, height, width)
   button:setStrokeColor(unpack(Color.gray))
@@ -90,6 +97,7 @@ local function drawButton(xPos, yPos, height, width, rgb)
   return button
 end
 
+-- draw button for blocks
 function Panel:drawBlockButtons(blockButtons, height, width)
   local len = #blockButtons
   for i = 0, len do
@@ -108,6 +116,7 @@ function Panel:drawBlockButtons(blockButtons, height, width)
   end
 end
 
+-- draw button to start game 
 function Panel:drawStartButton(offset, width, height)
   local startButton = drawButton(
     offset * self.width / 5,
@@ -120,6 +129,7 @@ function Panel:drawStartButton(offset, width, height)
   self.panelGroup:insert(startButton)
 end
 
+-- draw all buttons
 function Panel:drawButtons()
   local height = self.width / 5 * 0.8
   local width = self.width / 5 * 0.8
@@ -137,6 +147,7 @@ function Panel:draw()
   self:drawButtons()
 end
 
+-- collision handler for yellow 
 function Panel:yellowCollision(event)
   self.counters[event.shape.color] = self.counters[event.shape.color] - 1
   if(self:noMoreBlocks()) then 
@@ -155,6 +166,7 @@ function Panel:yellowCollision(event)
   Runtime:dispatchEvent(swapRedBlueEvent)
 end
 
+-- collision handler for blue
 function Panel:blueCollision(event)
   self.counters[event.shape.color] = self.counters[event.shape.color] - 1
   makeRedEvent = {
@@ -166,6 +178,7 @@ function Panel:blueCollision(event)
   Runtime:dispatchEvent(makeRedEvent)
 end
 
+-- collision handler for red
 function Panel:redCollision(event)
   self.counters[event.shape.color] = self.counters[event.shape.color] - 1
   if(self:noMoreBlocks()) then
@@ -187,6 +200,7 @@ function Panel:init()
   self:addBlockListeners()
 end
 
+-- remove panel from display
 function Panel:teardown()
   self.panelGroup:removeSelf()
 end

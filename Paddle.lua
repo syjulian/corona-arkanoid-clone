@@ -14,10 +14,12 @@ function Paddle:new(o)
   return o
 end
 
+-- initialize paddle
 function Paddle:init(o)
   self:draw()
 end
 
+-- draw paddle
 function Paddle:draw()
   self.shape = display.newRect(self.xPos, self.yPos, self.length, self.width)
   self.shape:setStrokeColor(unpack(Color.black))
@@ -25,6 +27,7 @@ function Paddle:draw()
   self.shape:setFillColor(unpack(Color.gray))
 end
 
+-- handler to move paddle left to right
 local function move (shape, event)
 	 if event.phase == 'began' then		
 		shape.markX = shape.x 
@@ -44,11 +47,13 @@ end
 
 function Paddle:touch(event) move(self.shape, event) end
 
+-- add listener for moving 
 function Paddle:activate()
   Runtime:addEventListener(
     'touch', self)
 end
 
+-- remove listener for moving
 function Paddle:deactivate()
   Runtime:removeEventListener(
     'touch', self)

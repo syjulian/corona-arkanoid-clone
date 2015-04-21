@@ -22,6 +22,7 @@ function Arena:new(o)
   return o
 end
 
+-- draw arena background
 function Arena:drawBg()
   local bg =
     display.newRect(0,50,self.width, self.height)
@@ -33,6 +34,7 @@ function Arena:drawBg()
   self.displayGroup:insert(bg)
 end
 
+-- draw arena scoreboard
 function Arena:drawScoreboard()
   local livesText = display.newText(
     'Lives: ' .. self.lives, 
@@ -41,15 +43,18 @@ function Arena:drawScoreboard()
   self.scoreboard = livesText
 end
 
+-- update current score
 function Arena:updateScoreboard()
   self.scoreboard.text = 'Lives: ' .. self.lives
 end
 
+-- remove scoreboard
 function Arena:removeScoreboard()
   self.scoreboard:removeSelf()
   self.scoreboard = nil
 end
 
+-- swap red and blues. remove red and replace with blue, and vice versa
 function Arena:swapRedBlueShapes(redBlockClass, blueBlockClass)  
   local len = #self.shapes
   for i = 1, len do
@@ -91,6 +96,7 @@ function Arena:swapRedBlueShapes(redBlockClass, blueBlockClass)
   end
 end
 
+-- draw arena walls
 function Arena:drawWalls()
   local top =
     display.newRect(0, 50,self.width, self.thickness)
@@ -122,6 +128,7 @@ function Arena:drawWalls()
   self.physics.addBody(left, 'static')
   self.physics.addBody(right, 'static')
   self.physics.addBody(bottom, 'static')
+  -- add listener for bottom collision
   bottom:addEventListener(
     'collision', 
     function()
@@ -133,10 +140,12 @@ function Arena:drawWalls()
   )
 end
 
+-- add physics to shape
 function Arena:addBlockShapePhysics(shape)
   self.physics.addBody(shape, 'dynamic', {density = 100.0})
 end
 
+-- add shape to arena
 function Arena:addShape(shape)
   timer.performWithDelay(100, function()
     self:addBlockShapePhysics(shape)
@@ -145,6 +154,7 @@ function Arena:addShape(shape)
   end)
 end
 
+-- draw paddle
 function Arena:drawPaddle()
   paddle = Paddle:new()
   paddle:init()
@@ -154,16 +164,19 @@ function Arena:drawPaddle()
   self.paddle = paddle
 end
 
+-- remove paddle
 function Arena:removePaddle()
   self.paddle:deactivate()
   self.paddle.shape:removeSelf()
   self.paddle = nil
 end
 
+-- change scoreboard to game over
 function Arena:gameOver()
   self.scoreboard.text = "GAME OVER"
 end
 
+-- flash color when hitting bottom wall
 function Arena:wallHit()
   self.bg:setFillColor(unpack(Color.black))
   timer.performWithDelay(
@@ -174,6 +187,7 @@ function Arena:wallHit()
   )
 end
 
+-- handle losing a life ,remove ball, decrement lives, redraw ball
 function Arena:loseLife()
   self:removeBall()
   self.lives = self.lives - 1
@@ -190,11 +204,13 @@ function Arena:loseLife()
   end
 end
 
+-- draw background and walls
 function Arena:drawSetup()
   self:drawBg()
   self:drawWalls()
 end
 
+-- draw ball and add physics to move
 function Arena:drawBall()
   ball = Ball:new()
   ball:init()
@@ -212,15 +228,18 @@ function Arena:drawBall()
   self.ball = ball
 end
 
+-- remove ball
 function Arena:removeBall()
   self.ball.shape:removeSelf()
   self.ball = nil
 end
 
+-- set up display for arena
 function Arena:init()
   self:drawSetup()
 end
 
+-- draw paddle, add display handler, ball, and scoreboard
 function Arena:startGame()
   self:drawPaddle()
   self.paddle:activate()

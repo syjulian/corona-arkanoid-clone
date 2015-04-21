@@ -6,23 +6,28 @@ local CountDown = require('CountDown')
 
 local gameScene = composer.newScene()
 
+-- create game components
 gameScene.arena = Arena:new()
 gameScene.panel = Panel:new()
 gameScene.countDown = CountDown
 
+-- create new block
 function gameScene:newBlock(blockClass, x, y)
   local block = self.panel:drawBlock(blockClass, x, y)
   self.arena:addShape(block.shape)
 end
 
+-- swap display objects
 function gameScene:swapRedBlue(event)
   self.arena:swapRedBlueShapes(event.redBlockClass, event.blueBlockClass)
 end
 
+-- create a red block. used for hitting blue handler
 function gameScene:makeRed(event)
   self:newBlock(event.blockClass, event.x, event.y)
 end
 
+-- handler for tapping the arena in editor mode
 function gameScene:arenaTap(event)  
   if(self.panel.toggled ~= nil) then
     local blockClass = self.panel.toggled.BlockClass
@@ -30,10 +35,12 @@ function gameScene:arenaTap(event)
   end
 end
 
+-- start physics
 function gameScene:startGame()
   gameScene.arena:startGame()
 end
 
+-- starts a countdown and removes the panel, editor mode
 function gameScene:start(event)
   local countDownSec = 4
   gameScene.countDown:init(countDownSec, display.contentCenterX, 0)
@@ -44,6 +51,8 @@ function gameScene:start(event)
   self:removeEventListener('arenaTap', self)
 end
 
+
+-- dispatch tap event for tapping arena
 function gameScene.arena.displayGroup:tap(event)
   local arenaTapEvent = {
     name = 'arenaTap',
@@ -54,10 +63,12 @@ function gameScene.arena.displayGroup:tap(event)
   gameScene:dispatchEvent(arenaTapEvent)
 end
 
+-- handler when ball hist the bottom
 function gameScene:bottomCollision()
   gameScene.arena:loseLife()
 end
 
+-- win, remove paddle, ball, and display game over
 function gameScene:win(event)
   local winText = display.newText(
     'You Win!',
@@ -71,6 +82,7 @@ function gameScene:win(event)
   self.arena:gameOver()
 end
 
+-- initialize components
 function gameScene:create(event)
   local sceneGroup = self.view
 
@@ -83,6 +95,7 @@ function gameScene:create(event)
   sceneGroup:insert(self.panel.panelGroup)
 end
 
+-- add listeners
 function gameScene:show(event)
   if(event.phase == 'will') then
     Runtime:addEventListener('start', gameScene)

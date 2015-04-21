@@ -15,6 +15,7 @@ function Block:new(o)
   return o
 end
 
+-- handler for moving block
 local function move(event)
   if event.phase == 'began' then
     event.target.markX = event.target.x
@@ -31,6 +32,7 @@ local function move(event)
   end
 end
 
+-- adds the collision handler for the physics
 function Block:addCollisionHandler()
   self.shape:addEventListener(
     'collision', 
@@ -49,12 +51,14 @@ function Block:addCollisionHandler()
   end)
 end
 
+-- initialize block
 function Block:init()
   self:draw()
   self:addCollisionHandler()
   self.shape:addEventListener('touch', move)
 end
 
+-- draw display object
 function Block:draw()
   self.shape = display.newRect(self.xPos, self.yPos, self.length, self.width)
   self.shape:setFillColor(unpack(self.rgb))

@@ -1,3 +1,4 @@
+-- Color reference
 local Color = {
   white = {1, 1, 1},
   teal = { 2 / 255, 132 / 255, 130 / 255 },

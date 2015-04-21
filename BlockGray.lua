@@ -5,6 +5,7 @@ local BlockGray = Block:new({
   rgb = Color.lightGray
 })
 
+-- overwrite gray collision handler to not remove object on collision
 function BlockGray:addCollisionHandler()
   self.shape:addEventListener('collision', function() end)
 end

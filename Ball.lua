@@ -13,10 +13,12 @@ function Ball:new(o)
   return o
 end
 
+-- initialize object
 function Ball:init(o)
   self:draw()
 end
 
+-- draw display object
 function Ball:draw()
   self.shape = display.newCircle(
     self.xPos,
