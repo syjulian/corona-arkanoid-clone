@@ -42,14 +42,16 @@ local function move (shape, event)
 	 end
 end
 
+function Paddle:touch(event) move(self.shape, event) end
+
 function Paddle:activate()
   Runtime:addEventListener(
-    'touch', function(event) move(self.shape, event) end)
+    'touch', self)
 end
 
 function Paddle:deactivate()
-  Runtime:addEventListener(
-    'touch', function(event) move(self.shape, event) end)
+  Runtime:removeEventListener(
+    'touch', self)
 end
 
 return Paddle

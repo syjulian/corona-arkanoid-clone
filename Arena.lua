@@ -155,6 +155,7 @@ function Arena:drawPaddle()
 end
 
 function Arena:removePaddle()
+  self.paddle:deactivate()
   self.paddle.shape:removeSelf()
   self.paddle = nil
 end
@@ -192,7 +193,6 @@ end
 function Arena:drawSetup()
   self:drawBg()
   self:drawWalls()
-  self:drawPaddle()
 end
 
 function Arena:drawBall()
@@ -222,6 +222,7 @@ function Arena:init()
 end
 
 function Arena:startGame()
+  self:drawPaddle()
   self.paddle:activate()
   self:drawBall()
   self:drawScoreboard()
